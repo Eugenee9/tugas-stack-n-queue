@@ -1,9 +1,8 @@
-#include <stdio.h>
+#include<stdio.h>
+#include<string.h>
+#define MAX 5
 #include <conio.h>
 #include <windows.h>
-#include <math.h>
-
-int main(), pilihan1(), pilihan2(), pilihan3(), piihan4(), pilihan5(), pilihan6(), pilihan7();
 
 void gotoxy(int x, int y)
 {
@@ -12,13 +11,39 @@ void gotoxy(int x, int y)
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
-
 void panah(int posisiMenu, int gerakPanah)
 {
     if (gerakPanah == posisiMenu)
         printf("==> ");
     else
         printf("   ");
+}
+int get_int(char *prompt)
+{
+    int num = 0, ch, count = 0;
+
+    printf("%s", prompt);
+    while (1)
+    {
+        ch = getch();
+        if (ch == 13 && count)
+        {
+            break;
+        }
+        if (ch >= 48 && ch <= 57 && ch != 13)
+        {
+            num = num * 10 + (ch - 48);
+            printf("%c", ch);
+            count++;
+        }
+        else if ((ch == 8 && num) || (num == 0 && count))
+        {
+            num /= 10;
+            printf("\b \b");
+            count--;
+        }
+    }
+    return num;
 }
 
 int menu1()
@@ -31,26 +56,20 @@ int menu1()
         system("cls");
         gotoxy(45, 11);
         printf("<============================>\n");
-        gotoxy(52, 13);
-        printf("TUGAS KALKULATOR");
+        gotoxy(58, 13);
+        printf("MENU");
         gotoxy(45, 15);
         printf("<============================>\n");
         gotoxy(45, 17);
         panah(1, posisi);
-        printf("1. PingPoroLanSudo");
+        printf("1. Stack String");
         gotoxy(45, 18);
         panah(2, posisi);
-        printf("2. SinCosTan");
+        printf("2. Queue Interger");
         gotoxy(45, 19);
         panah(3, posisi);
-        printf("3. Hitung Keliling dan Luas");
-        gotoxy(45, 20);
-        panah(4, posisi);
-        printf("4. Hitung Akar Kuadrat");
+        printf("3. Exit");
         gotoxy(45, 21);
-        panah(5, posisi);
-        printf("5. Exit");
-        gotoxy(45, 23);
         printf("<============================>\n");
 
         keyPressed = getch();
@@ -69,9 +88,9 @@ int menu1()
         }
         if (posisi < 1)
         {
-            posisi = 5;
+            posisi = 3;
         }
-        else if (posisi > 5)
+        else if (posisi > 3)
         {
             posisi = 1;
         }
@@ -79,1152 +98,317 @@ int menu1()
     }
 }
 
-int menu2()
+   struct Tumpukan{
+            char data[5][50];
+            int top; //untuk menentukan data paling atas
+
+        }tumpuk;
+        //buat fungsi apakah tumpukan masih kosong
+        int isEmpty()
+        {
+            if(tumpuk.top == -1)
+            {
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+
+        //buat fungsi apakah tumpukan sudah penuh
+        int isFull()
+        {
+            if(tumpuk.top == MAX-1)
+            {
+                return 1;
+            }
+            else{
+                return 0;
+            }
+        }
+
+        void inisialisasi()
+        {
+            //decalare bahwa tumpukan masih kosong
+            tumpuk.top = -1;
+        }
+
+        void push()
+        {
+            char temp[30];
+            if(isFull() != 1)
+            {
+                tumpuk.top++;
+                printf("\nMasukkan data:");
+                scanf("%s",&temp);
+                strcpy(tumpuk.data[tumpuk.top],temp);
+                printf("Data %s berhasil di input\n",tumpuk.data[tumpuk.top]);
+            }else{
+                printf("\nData sudah penuh");
+            }
+        }
+
+        void pop()
+        {
+            if(isEmpty() != 1)
+            {
+                printf("\nData %s telah dibuang\n",tumpuk.data[tumpuk.top]);
+                tumpuk.top--;
+
+            }else{
+                printf("\nData masih kosong\n");
+            }
+        }
+
+        void printData()
+        {
+            if(isEmpty() !=1)
+            {
+                for(int i=tumpuk.top;i>=0;i--)
+                {
+                    printf("\n%s\n",tumpuk.data[i]);
+                }
+            }else{
+                printf("Data masih kosong\n");
+            }
+        }
+    void stack()
+    {
+        inisialisasi();
+        int choice;
+        do{
+            system("cls");
+            printf("1.Push Stack\n");
+            printf("2.Pop Stack\n");
+            printf("3.Print Stack\n");
+            printf("4.Clear Stack\n");
+            printf("5.Exit\n");
+            //printf("Input pilihan:");
+            //scanf("%d",&choice);
+            choice=get_int("masukan pilihan : ");
+                switch(choice)
+                {
+                case 1:
+                    push();
+                    getch();
+                    break;
+                case 2:
+                    pop();
+                    getch();
+                    break;
+                case 3:
+                    printData();
+                    getch();
+                    break;
+                case 4:
+                    if(isEmpty())
+                    {
+                        printf("\nData masih kosong!,tidak bisa reset\n");
+                    }
+                    else{
+                          inisialisasi();
+                    printf("\nData telah di reset!\n");
+                    }
+                    getch();
+                    break;
+                default:
+                    fflush(stdin);
+                    printf("tidak ada dalam pilihan\n");
+                    getch();
+                    break;
+                    case 5:
+                    main();
+                    break;
+                }
+
+        }while(choice >0 && choice < 6);
+
+return 0;
+    }
+    struct Antrian{
+        int head;
+        int tail;
+        int data[MAX];
+    }antrian;
+
+    int isempty()
+    {
+        if(antrian.tail == -1)
+        {
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+    int isfull()
+    {
+        if(antrian.tail == MAX -1)
+        {
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+    void inisial()
+    {
+        antrian.head=antrian.tail = -1;
+    }
+
+    void enqueue(int data)
+    {
+        if(isempty()==1)
+        {
+            antrian.head=antrian.tail = 0;
+            antrian.data[antrian.tail] = data;
+            printf("Data %d berhasil diinput!\n",antrian.data[antrian.tail]);
+        }
+        else{
+
+
+        if(isfull() == 0)
+        {
+            antrian.tail++;
+            antrian.data[antrian.tail] = data;
+            printf("data %d berhasil di input\n",antrian.data[antrian.tail]);
+        }
+        }
+    }
+
+    int dequeue()
+    {
+        if(isempty() == 1)
+        {
+            printf("\nData masih kosong!\n");
+        }
+        else{
+            int i;
+            int e = antrian.data[antrian.head];
+            printf("\ndata %d telah dikeluarkan dari antiran\n",antrian.data[antrian.head]);
+            for(i=antrian.head;i<=antrian.tail-1;i++)
+            {
+                antrian.data[i] = antrian.data[i+1];
+            }
+            antrian.tail--;
+                 return e;
+
+        }
+
+    }
+
+    void Clear()
+    {
+        antrian.head = antrian.tail = -1;
+        printf("\nData telah di reset!\n");
+    }
+
+    void print()
+    {
+        if(isempty() == 0)
+        {
+            for(int i=antrian.head;i<=antrian.tail;i++)
+            {
+                printf("\n%d ",antrian.data[i]);
+
+            }
+        }else{
+            printf("\nData masih kosongg!\n");
+            getch();
+            queue();
+        }
+    }
+
+    void queue()
+    {
+        int dt;
+        inisial();
+     int choice;
+        do{
+                system("cls");
+            printf("1.Enqueue\n");
+            printf("2.Dequeue\n");
+            printf("3.Print Queue\n");
+            printf("4.Clear Queue\n");
+            printf("5.Exit\n");
+            //printf("Input pilihan:");
+            //scanf("%d",&choice);
+            choice=get_int("masukan pilihan : ");
+                switch(choice)
+                {
+                case 1:
+                    if(isfull() !=1)
+                    {
+                        printf("\nMasukkan data:");
+                        scanf("%d",&dt);
+                        enqueue(dt);
+                        getch();
+                    }else{
+                        printf("\ndata sudah penuh!\n");
+                        getch();
+                    }
+                    break;
+                case 2:
+                    dequeue();
+                    getch();
+                    break;
+                case 3:
+                    print();
+                    printf("\n");
+                    getch();
+                    break;
+                case 4:
+                   Clear();
+                   getch();
+                    break;
+                case 5:
+                    main();
+                    break;
+                default:
+                    fflush(stdin);
+                    printf("\ntidak ada dalam pilihan\n");
+                    getch();
+                    break;
+                }
+
+        }while(choice>0 && choice <6);
+        return 0;
+
+    }
+
+void exit1()
 {
     system("cls");
-    int posisi = 1;
-    int keyPressed = 0;
-    while (keyPressed != 27)
-    {
-        system("cls");
-        gotoxy(45, 11);
-        printf("<============================>\n");
-        gotoxy(51, 13);
-        printf("Ping Poro Lan Sudo");
-        gotoxy(45, 15);
-        printf("<============================>\n");
-        gotoxy(45, 17);
-        panah(1, posisi);
-        printf("1. Perkalian");
-        gotoxy(45,18);
-        panah(2, posisi);
-        printf("2. Pembagian");
-        gotoxy(45, 19);
-        panah(3, posisi);
-        printf("3. Penjumlahan");
-        gotoxy(45, 20);
-        panah(4, posisi);
-        printf("4. Pengurangan");
-        gotoxy(45, 21);
-        panah(5, posisi);
-        printf("5. Return Menu Utama");
-        gotoxy(45, 23);
-        printf("<============================>\n");
-
-        keyPressed = getch();
-
-        if (keyPressed == 72)
-        {
-            posisi--;
-        }
-        else if (keyPressed == 80)
-        {
-            posisi++;
-        }
-        else if (keyPressed == 13)
-        {
-            return posisi;
-        }
-        if (posisi < 1)
-        {
-            posisi = 5;
-        }
-        else if (posisi > 5)
-        {
-            posisi = 1;
-        }
-        keyPressed = 'a';
-    }
+    gotoxy(40,1);
+    printf("================================================\n");
+    gotoxy(40,2);
+    printf("|                                              |\n");
+    gotoxy(40,3);
+    printf("|                TERIIMA KASIH                 |\n");
+    gotoxy(40,4);
+    printf("|                                              |\n");
+    gotoxy(40,5);
+    printf("================================================\n");
+    getch();
+    exit(0);
 }
 
-int menu3()
-{
-    system("cls");
-    int posisi = 1;
-    int keyPressed = 0;
-    while (keyPressed != 27)
-    {
-        system("cls");
-        gotoxy(45, 11);
-        printf("<============================>\n");
-        gotoxy(55, 13);
-        printf("Sin Cos Tan");
-        gotoxy(45, 15);
-        printf("<============================>\n");
-        gotoxy(45, 17);
-        panah(1, posisi);
-        printf("1. Sinus");
-        gotoxy(45, 18);
-        panah(2, posisi);
-        printf("2. Cosinus");
-        gotoxy(45, 19);
-        panah(3, posisi);
-        printf("3. Tangen");
-        gotoxy(45, 20);
-        panah(4, posisi);
-        printf("4. Return Menu Utama");
-        gotoxy(45, 22);
-        printf("<============================>\n");
-
-        keyPressed = getch();
-
-        if (keyPressed == 72)
-        {
-            posisi--;
-        }
-        else if (keyPressed == 80)
-        {
-            posisi++;
-        }
-        else if (keyPressed == 13)
-        {
-            return posisi;
-        }
-        if (posisi < 1)
-        {
-            posisi = 4;
-        }
-        else if (posisi > 4)
-        {
-            posisi = 1;
-        }
-        keyPressed = 'a';
-    }
-}
-
-int menu4()
-{
-    system("cls");
-    int posisi = 1;
-    int keyPressed = 0;
-    while (keyPressed != 27)
-    {
-        system("cls");
-        gotoxy(45, 11);
-        printf("<============================>\n");
-        gotoxy(50, 13);
-        printf("Keliling Luas Volume");
-        gotoxy(45, 15);
-        printf("<============================>\n");
-        gotoxy(45, 17);
-        panah(1, posisi);
-        printf("1. Hitung Keliling Bangun Datar");
-        gotoxy(45, 18);
-        panah(2, posisi);
-        printf("2. Hitung Luas Bangun Datar");
-        gotoxy(45, 19);
-        panah(3, posisi);
-        printf("3. Hitung Volume Bangun Ruang");
-        gotoxy(45, 20);
-        panah(4, posisi);
-        printf("4. Return Menu Utama");
-        gotoxy(45, 22);
-        printf("<============================>\n");
-
-        keyPressed = getch();
-
-        if (keyPressed == 72)
-        {
-            posisi--;
-        }
-        else if (keyPressed == 80)
-        {
-            posisi++;
-        }
-        else if (keyPressed == 13)
-        {
-            return posisi;
-        }
-        if (posisi < 1)
-        {
-            posisi = 4;
-        }
-        else if (posisi > 4)
-        {
-            posisi = 1;
-        }
-        keyPressed = 'a';
-    }
-}
-
-int menu5()
-{
-    int posisi = 1;
-    int keyPressed = 0;
-    while (keyPressed != 27)
-    {
-        system("cls");
-        gotoxy(45, 11);
-        printf("<============================>\n");
-        gotoxy(44, 13);
-        printf(" Keliling Bangun Datar");
-        gotoxy(45, 15);
-        printf("<============================>\n");
-        gotoxy(45, 17);
-        panah(1, posisi);
-        printf("1. Keliling Persegi");
-        gotoxy(45, 18);
-        panah(2, posisi);
-        printf("2. Keliling Trapesium");
-        gotoxy(45, 19);
-        panah(3, posisi);
-        printf("3. Keliling Layang-Layang");
-        gotoxy(45, 20);
-        panah(4, posisi);
-        printf("4. Keliling Lingkaran");
-        gotoxy(45, 21);
-        panah(5, posisi);
-        printf("5. Return Menu Utama");
-        gotoxy(45, 23);
-        printf("<============================>\n");
-
-        keyPressed = getch();
-
-        if (keyPressed == 72)
-        {
-            posisi--;
-        }
-        else if (keyPressed == 80)
-        {
-            posisi++;
-        }
-        else if (keyPressed == 13)
-        {
-            return posisi;
-        }
-        if (posisi < 1)
-        {
-            posisi = 5;
-        }
-        else if (posisi > 5)
-        {
-            posisi = 1;
-        }
-        keyPressed = 'a';
-    }
-}
-
-int menu6()
-{
-    int posisi = 1;
-    int keyPressed = 0;
-    while (keyPressed != 27)
-    {
-        system("cls");
-        gotoxy(45, 11);
-        printf("<============================>\n");
-        gotoxy(46, 13);
-        printf(" Luas Bangun Datar");
-        gotoxy(45, 15);
-        printf("<============================>\n");
-        gotoxy(45, 17);
-        panah(1, posisi);
-        printf("1. Luas Persegi");
-        gotoxy(45, 18);
-        panah(2, posisi);
-        printf("2. Luas Trapesium");
-        gotoxy(45, 19);
-        panah(3, posisi);
-        printf("3. Luas Layang-Layang");
-        gotoxy(45, 20);
-        panah(4, posisi);
-        printf("4. Luas Lingkaran");
-        gotoxy(45, 21);
-        panah(5, posisi);
-        printf("5. Return Menu Utama");
-        gotoxy(45, 23);
-        printf("<============================>\n");
-
-        keyPressed = getch();
-
-        if (keyPressed == 72)
-        {
-            posisi--;
-        }
-        else if (keyPressed == 80)
-        {
-            posisi++;
-        }
-        else if (keyPressed == 13)
-        {
-            return posisi;
-        }
-        if (posisi < 1)
-        {
-            posisi = 5;
-        }
-        else if (posisi > 5)
-        {
-            posisi = 1;
-        }
-        keyPressed = 'a';
-    }
-}
-
-int menu7()
-{
-    int posisi = 1;
-    int keyPressed = 0;
-    while (keyPressed != 27)
-    {
-        system("cls");
-        gotoxy(45, 11);
-        printf("<============================>\n");
-        gotoxy(45, 13);
-        printf(" Volume Bangun Ruang");
-        gotoxy(45, 15);
-        printf("<============================>\n");
-        gotoxy(45, 17);
-        panah(1, posisi);
-        printf("1. Volume Kubus");
-        gotoxy(45, 18);
-        panah(2, posisi);
-        printf("2. Volume Prisma");
-        gotoxy(45, 19);
-        panah(3, posisi);
-        printf("3. Volume Limas");
-        gotoxy(45, 20);
-        panah(4, posisi);
-        printf("4. Volume Bola");
-        gotoxy(45, 21);
-        panah(5, posisi);
-        printf("5. Return Menu Utama");
-        gotoxy(45, 23);
-        printf("<============================>\n");
-
-        keyPressed = getch();
-
-        if (keyPressed == 72)
-        {
-            posisi--;
-        }
-        else if (keyPressed == 80)
-        {
-            posisi++;
-        }
-        else if (keyPressed == 13)
-        {
-            return posisi;
-        }
-        if (posisi < 1)
-        {
-            posisi = 5;
-        }
-        else if (posisi > 5)
-        {
-            posisi = 1;
-        }
-        keyPressed = 'a';
-    }
-}
-
-void perkalian()
-{
-    float a, b;
-    system("cls");
-    printf("Masukkan angka pertama = ");
-    scanf("%f", &a);
-    printf("Masukkan angka kedua = ");
-    scanf("%f", &b);
-    printf("Hasil dari %.2f * %.2f adalah = %.2f\n", a, b, a * b);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void perkalian();
-    }
-    else if (y == 'Y')
-    {
-        void perkalian();
-    }
-    else if (y == 'n')
-    {
-        pilihan2();
-    }
-    else if (y == 'N')
-    {
-        pilihan2();
-    }
-}
-void pembagian()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan angka pertama = ");
-    scanf("%f", &a);
-    printf("Masukkan angka kedua = ");
-    scanf("%f", &b);
-    printf("Hasil dari %.2f / %.2f adalah = %.2f\n", a, b, a / b);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void pembagian();
-    }
-    else if (y == 'Y')
-    {
-        void pembagian();
-    }
-    else if (y == 'n')
-    {
-        pilihan2();
-    }
-    else if (y == 'N')
-    {
-        pilihan2();
-    }
-}
-void penjumlahan()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan angka pertama = ");
-    scanf("%f", &a);
-    printf("Masukkan angka kedua = ");
-    scanf("%f", &b);
-    printf("Hasil dari %.2f + %.2f adalah = %.2f\n", a, b, a + b);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void penjumlahan();
-    }
-    else if (y == 'Y')
-    {
-        void penjumlahan();
-    }
-    else if (y == 'n')
-    {
-        pilihan2();
-    }
-    else if (y == 'N')
-    {
-        pilihan2();
-    }
-}
-void pengurangan()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan angka pertama = ");
-    scanf("%f", &a);
-    printf("Masukkan angka kedua = ");
-    scanf("%f", &b);
-    printf("Hasil dari %.2f - %.2f adalah = %.2f\n", a, b, a - b);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void pengurangan();
-    }
-    else if (y == 'Y')
-    {
-        void pengurangan();
-    }
-    else if (y == 'n')
-    {
-        pilihan2();
-    }
-    else if (y == 'N')
-    {
-        pilihan2();
-    }
-}
-
-void sinus()
-{
-    system("cls");
-    float a;
-    printf("Masukkan derajat sinus  = ");
-    scanf("%f", &a);
-    printf("Hasil Sinus adalah = %.2f\n", sin(3.14 / 180 * a));
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void sinus();
-    }
-    else if (y == 'Y')
-    {
-        void sinus();
-    }
-    else if (y == 'n')
-    {
-        pilihan3();
-    }
-    else if (y == 'N')
-    {
-        pilihan3();
-    }
-}
-void cosinus()
-{
-    system("cls");
-    float a;
-    printf("Masukkan derajat Cosinus  = ");
-    scanf("%f", &a);
-    printf("Hasil Cosinus adalah = %.2f\n", cos(3.14 / 180 * a));
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void cosinus();
-    }
-    else if (y == 'Y')
-    {
-        void cosinus();
-    }
-    else if (y == 'n')
-    {
-        pilihan3();
-    }
-    else if (y == 'N')
-    {
-        pilihan3();
-    }
-}
-void tangen()
-{
-    system("cls");
-    float a;
-    printf("Masukkan derajat Tangen  = ");
-    scanf("%f", &a);
-    printf("Hasil Tangen adalah = %.2f\n", tan(3.14 / 180 * a));
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void tangen();
-    }
-    else if (y == 'Y')
-    {
-        void tangen();
-    }
-    else if (y == 'n')
-    {
-        pilihan3();
-    }
-    else if (y == 'N')
-    {
-        pilihan3();
-    }
-}
-
-void kll_persegi()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan Panjang Persegi : ");
-    scanf("%f", &a);
-    printf("Masukkan lebar Persegi   : ");
-    scanf("%f", &b);
-    printf("Keliling Persegi Adalah  : %.2f\n", 2 * a + 2 * b);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void kll_persegi();
-    }
-    else if (y == 'Y')
-    {
-        void kll_persegi();
-    }
-    else if (y == 'n')
-    {
-        pilihan5();
-    }
-    else if (y == 'N')
-    {
-        pilihan5();
-    }
-}
-void kll_trapesium()
-{
-    system("cls");
-    float a, b, c;
-    printf("Masukkan Sisi Atas Trapesium Sama Kaki   : ");
-    scanf("%f", &a);
-    printf("Masukkan Sisi Bawah Trapesium Sama Kaki  : ");
-    scanf("%f", &b);
-    printf("Masukkan Sisi Miring Trapesium Sama Kaki : ");
-    scanf("%f", &c);
-    printf("Keliling Trapesium Sama Kaki Adalah      : %.2f\n", 2 * c + a + b);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void kll_trapesium();
-    }
-    else if (y == 'Y')
-    {
-        void kll_trapesium();
-    }
-    else if (y == 'n')
-    {
-        pilihan5();
-    }
-    else if (y == 'N')
-    {
-        pilihan5();
-    }
-}
-void kll_layang2()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan Panjang Sisi Atas Layang-layang : ");
-    scanf("%f", &a);
-    printf("Masukkan Sisi Bawah Layang-layang        : ");
-    scanf("%f", &b);
-    printf("Keliling Layang-layang Adalah            : %.2f\n", 2 * a + 2 * b);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void kll_layang2();
-    }
-    else if (y == 'Y')
-    {
-        void kll_layang2();
-    }
-    else if (y == 'n')
-    {
-        pilihan5();
-    }
-    else if (y == 'N')
-    {
-        pilihan5();
-    }
-}
-void kll_lingkaran()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan Panjang Diameter Lingkaran  : ");
-    scanf("%f", &a);
-    printf("Masukkan Panjang Jari-jari Lingkaran : ");
-    scanf("%f", &b);
-    printf("Keliling Lingkaran Berdasarkan Jari-jari Adalah : %.2f\n", 2 * 3.14 * b);
-    printf("Keliling Lingkaran Berdasarkan Diameter Adalah  : %.2f\n", 3.14 * a);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void kll_lingkaran();
-    }
-    else if (y == 'Y')
-    {
-        void kll_lingkaran();
-    }
-    else if (y == 'n')
-    {
-        pilihan5();
-    }
-    else if (y == 'N')
-    {
-        pilihan5();
-    }
-}
-
-void ls_pp()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan Panjang Persegi : ");
-    scanf("%f", &a);
-    printf("Masukkan lebar Persegi   : ");
-    scanf("%f", &b);
-    printf("Luas Persegi Adalah      : %.2f\n", a * b);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void ls_pp();
-    }
-    else if (y == 'Y')
-    {
-        void ls_pp();
-    }
-    else if (y == 'n')
-    {
-        pilihan6();
-    }
-    else if (y == 'N')
-    {
-        pilihan6();
-    }
-}
-void ls_trapesium()
-{
-    system("cls");
-    float a, b, c;
-    printf("Masukkan Sisi Atas Trapesium Sama Kaki  : ");
-    scanf("%f", &a);
-    printf("Masukkan Sisi Bawah Trapesium Sama Kaki : ");
-    scanf("%f", &b);
-    printf("Masukkan Tinggi Trapesium Sama Kaki     : ");
-    scanf("%f", &c);
-    printf("Luas Trapesium Sama Kaki Adalah         : %.2f\n", 0.5 * c * (a + b));
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void ls_trapesium();
-    }
-    else if (y == 'Y')
-    {
-        void ls_trapesium();
-    }
-    else if (y == 'n')
-    {
-        pilihan6();
-    }
-    else if (y == 'N')
-    {
-        pilihan6();
-    }
-}
-void ls_layang2()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan Diagonal Panjang Layang-layang : ");
-    scanf("%f", &a);
-    printf("Masukkan Diagonal Lebar Layang-layang   : ");
-    scanf("%f", &b);
-    printf("Luas Layang-layang Adalah               : %.2f\n", 0.5 * a * b);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void ls_layang2();
-    }
-    else if (y == 'Y')
-    {
-        void ls_layang2();
-    }
-    else if (y == 'n')
-    {
-        pilihan6();
-    }
-    else if (y == 'N')
-    {
-        pilihan6();
-    }
-}
-void ls_lingkaran()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan Panjang Diameter Lingkaran  : ");
-    scanf("%f", &a);
-    printf("Masukkan Panjang Jari-jari Lingkaran : ");
-    scanf("%f", &b);
-    printf("Luas Lingkaran Berdasarkan Jari-jari Adalah : %.2f\n", 3.14 * pow(b, 2));
-    printf("Luas Lingkaran Berdasarkan Diameter Adalah  : %.2f\n", 3.14 * pow(a / 2, 2));
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void lingkaran();
-    }
-    else if (y == 'Y')
-    {
-        void lingkaran();
-    }
-    else if (y == 'n')
-    {
-        pilihan6();
-    }
-    else if (y == 'N')
-    {
-        pilihan6();
-    }
-}
-
-void vol_kubus()
-{
-    system("cls");
-    float a;
-    printf("Masukkan Panjang Sisi Kubus : ");
-    scanf("%f", &a);
-    printf("Volume Kubus Adalah         : %.2f\n", pow(a, 3));
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void vol_kubus();
-    }
-    else if (y == 'Y')
-    {
-        void vol_kubus();
-    }
-    else if (y == 'n')
-    {
-        pilihan7();
-    }
-    else if (y == 'N')
-    {
-        pilihan7();
-    }
-}
-void vol_prisma()
-{
-    system("cls");
-    float a, b, c, d, e, f;
-    printf("Masukkan Sisi Persegi        : ");
-    scanf("%f", &a);
-    printf("Masukkan Lebar Alas Segitiga : ");
-    scanf("%f", &b);
-    printf("Masukkan Tinggi Segitiga     : ");
-    scanf("%f", &c);
-    printf("Masukkan Jari-Jari Lingkaran : ");
-    scanf("%f", &d);
-    printf("Masukkan Diameter Lingkaran  : ");
-    scanf("%f", &e);
-    printf("Masukkan Tinggi Prisma       : ");
-    scanf("%f", &f);
-    printf("Volume Prisma Persegi Adalah                 : %.2f\n", pow(a, 2) * f);
-    printf("Volume Prisma Segitiga Adalah                : %.2f\n", 0.5 * b * c * f);
-    printf("Volume Silinder Berdasarkan Jari-jari Adalah : %.2f\n", 3.14 * pow(d, 2) * f);
-    printf("Volume Silinder Berdasarkan Diameter Adalah  : %.2f\n", 3.14 * pow(e / 2, 2) * f);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void vol_prisma();
-    }
-    else if (y == 'Y')
-    {
-        void vol_prisma();
-    }
-    else if (y == 'n')
-    {
-        pilihan7();
-    }
-    else if (y == 'N')
-    {
-        pilihan7();
-    }
-}
-void vol_limas()
-{
-    system("cls");
-    float a, b, c, d, e, f;
-    printf("Masukkan Sisi Persegi        : ");
-    scanf("%f", &a);
-    printf("Masukkan Lebar Alas Segitiga : ");
-    scanf("%f", &b);
-    printf("Masukkan Tinggi Segitiga     : ");
-    scanf("%f", &c);
-    printf("Masukkan Jari-jari Lingkaran : ");
-    scanf("%f", &d);
-    printf("Masukkan Diameter Lingkaran  : ");
-    scanf("%f", &e);
-    printf("Masukkan Tinggi Limas        : ");
-    scanf("%f", &f);
-    printf("Volume Limas Persegi Adalah                        : %.2f\n", 1.0 / 3.0 * pow(a, 2) * f);
-    printf("Volume Limas Segitiga Adalah                       : %.2f\n", 1.0 / 3.0 * 0.5 * b * c * f);
-    printf("Volume Limas Silinder Berdasarkan Jari-jari Adalah : %.2f\n", 1.0 / 3.0 * 3.14 * pow(d, 2) * f);
-    printf("Volume Limas Silinder Berdasarkan Diameter Adalah  : %.2f\n", 1.0 / 3.0 * 3.14 * pow(e / 2, 2) * f);
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void vol_limas();
-    }
-    else if (y == 'Y')
-    {
-        void vol_limas();
-    }
-    else if (y == 'n')
-    {
-        pilihan7();
-    }
-    else if (y == 'N')
-    {
-        pilihan7();
-    }
-}
-void vol_bola()
-{
-    system("cls");
-    float a, b;
-    printf("Masukkan Jari-jari Lingkaran : ");
-    scanf("%f", &a);
-    printf("Masukkan Diameter Lingkaran  : ");
-    scanf("%f", &b);
-    printf("Volume Bola Berdasarkan Jari-jari Adalah : %.2f\n", 4.0 / 3.0 * 3.14 * pow(a, 3));
-    printf("Volume Bola Berdasarkan Diameter Adalah  : %.2f\n", 4.0 / 3.0 * 3.14 * pow((b / 2), 3));
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void vol_bola();
-    }
-    else if (y == 'Y')
-    {
-        void vol_bola();
-    }
-    else if (y == 'n')
-    {
-        pilihan7();
-    }
-    else if (y == 'N')
-    {
-        pilihan7();
-    }
-}
-
-void akar()
-{
-    system("cls");
-    float a;
-    printf("masukkan bilangan yang akan diakar = ");
-    scanf("%f", &a);
-    printf("Hasil akar dari %.2f adalah %.2f\n", a, sqrt(a));
-    char y;
-    printf("Ingin mengulang Hitung? (y/n) = ");
-    scanf(" %c", &y);
-    if (y == 'y')
-    {
-        void akar();
-    }
-    else if (y == 'Y')
-    {
-        void akar();
-    }
-    else if (y == 'n')
-    {
-        pilihan1();
-    }
-    else if (y == 'N')
-    {
-        pilihan1();
-    }
-}
-
-// menu utama
-int pilihan1()
-{
-    int pilihan = menu1();
-
-    while (pilihan != 5)
-    {
-        switch (pilihan)
-        {
-        case 1:
-            pilihan2();
-            break;
-        case 2:
-            pilihan3();
-            break;
-        case 3:
-            piihan4();
-            break;
-        case 4:
-            akar();
-            break;
-        case 5:
-            exit(0);
-            break;
-        }
-    }
-}
-
-// menu pingporosudo
-int pilihan2()
-{
-    int pilihan = menu2();
-
-    while (pilihan != 6)
-    {
-        switch (pilihan)
-        {
-        case 1:
-            perkalian();
-            break;
-        case 2:
-            pembagian();
-            break;
-        case 3:
-            penjumlahan();
-            break;
-        case 4:
-            pengurangan();
-            break;
-        case 5:
-            pilihan1();
-            break;
-        }
-    }
-}
-
-// menu sincostan
-int pilihan3()
-{
-    int pilihan = menu3();
-
-    while (pilihan != 5)
-    {
-        switch (pilihan)
-        {
-        case 1:
-            sinus();
-            break;
-        case 2:
-            cosinus();
-            break;
-        case 3:
-            tangen();
-            break;
-        case 4:
-            pilihan1();
-            break;
-        }
-    }
-}
-
-// menu induk keliling luas volume
-int piihan4()
-{
-    int pilihan = menu4();
-
-    while (pilihan != 5)
-    {
-        switch (pilihan)
-        {
-        case 1:
-            pilihan5();
-            break;
-        case 2:
-            pilihan6();
-            break;
-        case 3:
-            pilihan7();
-            break;
-        case 4:
-            pilihan1();
-            break;
-        }
-    }
-}
-
-// menu keliling
-int pilihan5()
-{
-    int pilihan = menu5();
-
-    while (pilihan != 6)
-    {
-        switch (pilihan)
-        {
-        case 1:
-            kll_persegi();
-            break;
-        case 2:
-            kll_trapesium();
-            break;
-        case 3:
-            kll_layang2();
-            break;
-        case 4:
-            kll_lingkaran();
-            break;
-        case 5:
-            piihan4();
-            break;
-        }
-    }
-}
-
-// menu luas
-int pilihan6()
-{
-    int pilihan = menu6();
-
-    while (pilihan != 6)
-    {
-        switch (pilihan)
-        {
-        case 1:
-            ls_pp();
-            break;
-        case 2:
-            ls_trapesium();
-            break;
-        case 3:
-            ls_layang2();
-            break;
-        case 4:
-            ls_lingkaran();
-            break;
-        case 5:
-            piihan4();
-            break;
-        }
-    }
-}
-
-// menu volume
-int pilihan7()
-{
-    int pilihan = menu7();
-
-    while (pilihan != 6)
-    {
-        switch (pilihan)
-        {
-        case 1:
-            vol_kubus();
-            break;
-        case 2:
-            vol_prisma();
-            break;
-        case 3:
-            vol_limas();
-            break;
-        case 4:
-            vol_bola();
-            break;
-        case 5:
-            piihan4();
-            break;
-        }
-    }
-}
-
-int main()
+    int main()
 {
     system("color 9");
-    char kata[50];
-    char pw[50];
-    printf("masukan username : \n");
-    scanf(" %[^\n]s", &kata);
-    printf("masukan passwword : ");
-    scanf(" %[^\n]s", &pw);
-    if((strcmp(kata, "asdosasd"))==0&&(strcmp(pw, "pass"))==0){
-        pilihan1();}
-        else{printf("username dan password salah");}
-
-    return 0;
+    int pilihan = menu1();
+    do
+    {
+        switch (pilihan)
+        {
+        case 1:
+            stack();
+            break;
+        case 2:
+            queue();
+            break;
+        case 3:
+            exit1();
+            break;
+        }
+    }while (pilihan != 2);
 }
